@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ *
+ *
+ * @property string name;
+ *
+ *
+ *
+ *  */
+
+class Language extends Model
+{
+    use HasFactory;
+
+    protected $primaryKey = 'language_id';
+    protected $table = 'language';
+    protected $fillable=['name'];
+
+    protected $hidden = ['last_update', 'language_id'];
+
+    public function film(){
+        return $this->hasMany(Film::class, 'language_id', 'language_id');
+    }
+}
