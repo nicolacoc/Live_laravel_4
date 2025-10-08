@@ -1,20 +1,20 @@
 <?php
-
+/**
+ * @property string $title
+ * @property string $description
+ * @property integer $release_year
+ * @property string $slug
+ * @property string $image
+ *
+ *
+ *
+ * */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @property string title
- * @property string description
- * @property integer release_year
- * @property string slug
- * @property string image
- *
- *
- *
- * */
+
 class Film extends Model
 {
     use HasFactory;
@@ -62,6 +62,13 @@ class Film extends Model
     public function category()
     {
         return $this->hasOneThrough(Category::class, Film_category::class, 'film_id', 'category_id', 'film_id', 'category_id');
+    }
+
+    /**
+     * @see Film_text::class;
+     * */
+    public function description(){
+        return $this->hasOne(Film_text::class, 'film_id', 'film_id');
     }
 
 

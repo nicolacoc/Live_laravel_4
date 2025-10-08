@@ -45,8 +45,20 @@ class film_controller extends Controller
     }
 
     function prova(Request $request){
-       $film = Film::query()->with(['actors', 'language', 'original_language', 'category'])->find($request->id);
-        return $film;
+       $film_query = Film::query()->with([
+           'actors',
+           'language',
+           'original_language',
+           'category',
+           'description'
+           ])
+           ->find($request->id);
+
+$film = $film_query;
+
+
+
+        return $film->title;
     }
 
 }
