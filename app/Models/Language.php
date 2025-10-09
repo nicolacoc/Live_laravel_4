@@ -24,6 +24,8 @@ class Language extends Model
 
     protected $hidden = ['last_update', 'language_id'];
 
+    public $timestamps = false;
+
     public function film(){
         return $this->hasMany(Film::class, 'language_id', 'language_id');
     }

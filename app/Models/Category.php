@@ -23,6 +23,8 @@ class Category extends Model
 
     protected $hidden = ['category_id', 'last_update', 'laravel_through_key'];
 
+    public $timestamps = false;
+
     public function films(){
         return $this->belongsToMany(Film::class, 'film_category', 'category_id', 'film_id');
     }

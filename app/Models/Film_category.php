@@ -11,5 +11,6 @@ class Film_category extends Model
 
     protected $table = 'film_category';
 
+    public $timestamps = false;
 
 }

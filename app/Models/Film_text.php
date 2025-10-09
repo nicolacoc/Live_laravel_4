@@ -21,6 +21,8 @@ class Film_text extends Model
 
     protected $hidden = ['film_id', 'title'];
 
+    public $timestamps = false;
+
     public function film(){
         return $this->hasOne(film::class, 'film_id', 'film_id');
     }
