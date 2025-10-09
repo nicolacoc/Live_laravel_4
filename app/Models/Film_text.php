@@ -16,8 +16,8 @@ class Film_text extends Model
 {
     use HasFactory;
     protected $table = 'film_text';
-    protected $primaryKey = 'film_id';
-    protected $fillable = ['title', 'description'];
+
+    protected $fillable = ['film_id','title', 'description'];
 
     protected $hidden = ['film_id', 'title'];
 
