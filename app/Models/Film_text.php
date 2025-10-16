@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  *
- * @property string title
+ * @property int film_id
  * @property string description
+ * @property string title
  *
  *
  * */
@@ -19,16 +20,20 @@ class Film_text extends Model
 
     protected $fillable = ['film_id','title', 'description'];
 
-    protected $hidden = ['film_id', 'title'];
+    protected $hidden = ['film_id'];
 
     public $timestamps = false;
 
+
+    /**
+     * @see Film
+     * */
     public function film(){
         return $this->hasOne(film::class, 'film_id', 'film_id');
     }
 
     /**
-     * @see Category::class;
+     * @see Category;
      * */
     public function category()
     {

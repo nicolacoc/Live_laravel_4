@@ -1,18 +1,19 @@
 <?php
-/**
- * @property string $title
- * @property string $description
- * @property integer $release_year
- * @property string $slug
- * @property string $image
- *
- *
- *
- * */
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+/**
+ * @property string title
+ * @property string description
+ * @property integer release_year
+ * @property string slug
+ * @property string image
+ *
+ *
+ *
+ * */
 
 
 class Film extends Model
@@ -35,29 +36,32 @@ class Film extends Model
         'image'
     ];
 
+    /**
+     * @see Actor;
+     * */
     public function actors()
     {
-        return $this->hasOneThrough(Actor::class, Film_actor::class, 'film_id', 'actor_id', 'film_id', 'actor_id');
+        return $this->hasManyThrough(Actor::class, Film_actor::class, 'film_id', 'actor_id', 'film_id', 'actor_id');
     }
 
     /**
-     * @see Language::class;
+     * @see Film_language;
      * */
     public function Language()
     {
-        return $this->hasOne(Language::class, 'language_id', 'language_id');
+        return $this->hasOne(Film_language::class, 'language_id', 'language_id');
     }
 
     /**
-     * @see Language::class;
+     * @see Film_language;
      * */
     public function original_language()
     {
-        return $this->hasOne(Language::class, 'language_id', 'original_language_id');
+        return $this->hasOne(Film_language::class, 'language_id', 'original_language_id');
     }
 
     /**
-     * @see Category::class;
+     * @see Category;
      * */
     public function category()
     {
@@ -65,9 +69,9 @@ class Film extends Model
     }
 
     /**
-     * @see Film_text::class;
+     * @see Film_text
      * */
-    public function description(){
+    public function Film_Text(){
         return $this->hasOne(Film_text::class, 'film_id', 'film_id');
     }
 

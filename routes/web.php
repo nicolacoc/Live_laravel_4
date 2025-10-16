@@ -22,7 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/film', [film_controller::class, 'index']);
-Route::get('/actor/{id}', [film_controller::class, 'prova']);
+Route::get('/film/{id}', [film_controller::class, 'prova']);
 Route::get('/category/{id}', [category_controller::class, 'index']);
 Route::post('/film/update/{id}', [film_controller::class, 'update']);
 Route::post('/film/insert', [film_controller::class, 'insert']);

@@ -50,7 +50,7 @@ class film_controller extends Controller
            'language',
            'original_language',
            'category',
-           'description'
+           'Film_Text'
            ])
            ->find($request->id);
 
@@ -58,7 +58,7 @@ $film = $film_query;
 
 
 
-        return $film->title;
+        return $film;
     }
 
 }

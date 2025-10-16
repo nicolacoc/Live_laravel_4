@@ -5,6 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int actor_id
+ * @property string first_name
+ * @property string last_name
+ *
+ * */
+
 class Actor extends Model
 {
     use HasFactory;

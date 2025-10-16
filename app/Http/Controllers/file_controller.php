@@ -5,20 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\Film;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class file_controller extends Controller
 {
-    public function index(Request $request):string{
-        $id= $request->id;
-        $file = $request->file('file');
+    public function index(Request $request): string
+    {
 
+        $validated = Validator::make($request->all(), [
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'file.required' => 'The file field is required.',
+            'file.image' => 'The file must be an image.',
+            'file.mimes' => 'The file must be a file of type: jpeg, png, jpg, gif.',
+        ])->validate();
 
-      $name=  Storage::putFile('public', $file);
-
-        $film= Film::query()->find($id);
-
+        $id = $request->id;
+        $name = Storage::putFile('public', $validated['file']);
+        $film = Film::query()->find($id);
         $film->image = $name;
-
         $film->save();
 
 

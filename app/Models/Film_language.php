@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  *
- *
+ * @property int language_id
  * @property string name;
  *
  *
  *
  *  */
 
-class Language extends Model
+class Film_language extends Model
 {
     use HasFactory;
 
