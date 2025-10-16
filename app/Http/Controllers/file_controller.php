@@ -18,6 +18,7 @@ class file_controller extends Controller
             'file.required' => 'The file field is required.',
             'file.image' => 'The file must be an image.',
             'file.mimes' => 'The file must be a file of type: jpeg, png, jpg, gif.',
+            'file.max' => 'The file may not be greater than 2048 kilobytes.'
         ])->validate();
 
         $id = $request->id;
