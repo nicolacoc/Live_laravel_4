@@ -26,11 +26,12 @@ class Actor extends Model
 
     protected $hidden=[
         'laravel_through_key',
-        'last_update'
+        'last_update',
+        'actor_id'
     ];
 
 
     public function films(){
-        return $this->belongsToMany(Film::class, 'film_actor', 'actor_id', 'film_id');
+        return $this->hasManyThrough(Film::class, Film_actor::class, 'actor_id', 'film_id', 'actor_id', 'film_id');
     }
 }

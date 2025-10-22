@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer release_year
  * @property string slug
  * @property string image
+ * @property integer language_id
+ * @property integer original_language_id
  *
  *
  *
@@ -20,10 +22,33 @@ class Film extends Model
 {
     use HasFactory;
 
+    const Title_name = 'title';
+    const Description_name = 'description';
+    const Release_year_name = 'release_year';
+    const Slug_name = 'slug';
+    const Image_name = 'image';
+    const Language_id_name = 'language_id';
+    const Original_language_id_name = 'original_language_id';
+    const Rating_name = 'rating';
+    const Special_features_name = 'special_features';
+    const Rental_duration_name = 'rental_duration';
+    const Rental_rate_name = 'rental_rate';
+    const Length_name = 'length';
+    const Replacement_cost_name = 'replacement_cost';
+
     protected $table = 'film';
     protected $primaryKey = 'film_id';
 
     public $timestamps = false;
+
+    protected $hidden = [
+        'laravel_through_key',
+        'last_update',
+        'film_id',
+        'language_id',
+        'original_language_id',
+        'actor_id'
+    ];
 
 
     protected $fillable = [
@@ -33,7 +58,13 @@ class Film extends Model
         'original_language_id',
         'release_year',
         'slug',
-        'image'
+        'image',
+        'rating',
+        'special_features',
+        'rental_duration',
+        'rental_rate',
+        'length',
+        'replacement_cost'
     ];
 
     /**
