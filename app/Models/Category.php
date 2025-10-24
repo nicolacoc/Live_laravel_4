@@ -13,20 +13,31 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+    const Name_name = 'name';
+    const Category_id_name = 'category_id';
+
+    const laravel_through_key_name = 'laravel_through_key';
+    const last_update_name = 'last_update';
+
+
 
 
 
     protected $table = 'category';
 
-    protected $fillable = ['name'];
+    protected $fillable = [self::Name_name];
 
-    protected $primaryKey = 'category_id';
+    protected $primaryKey = self::Category_id_name;
 
-    protected $hidden = ['category_id', 'last_update', 'laravel_through_key'];
+    protected $hidden = [
+        self::Category_id_name,
+        self::last_update_name,
+        self::laravel_through_key_name
+    ];
 
     public $timestamps = false;
 
     public function films(){
-        return $this->belongsToMany(Film::class, 'film_category', 'category_id', 'film_id');
+        return $this->hasManyThrough(Film::class, Film_category::class, self::Category_id_name, Film::Film_id_name, self::Category_id_name, Film::Film_id_name);
     }
 }

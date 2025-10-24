@@ -15,12 +15,17 @@ use Illuminate\Database\Eloquent\Model;
  * */
 class Film_text extends Model
 {
+
+    const Film_id_name = 'film_id';
+    const Title_name = 'title';
+    const Description_name = 'description';
+
     use HasFactory;
     protected $table = 'film_text';
 
-    protected $fillable = ['film_id','title', 'description'];
+    protected $fillable = [self::Film_id_name,self::Title_name, self::Description_name];
 
-    protected $hidden = ['film_id'];
+    protected $hidden = [self::Film_id_name];
 
     public $timestamps = false;
 
@@ -29,7 +34,7 @@ class Film_text extends Model
      * @see Film
      * */
     public function film(){
-        return $this->hasOne(film::class, 'film_id', 'film_id');
+        return $this->hasOne(film::class, Film::Film_id_name, self::Film_id_name);
     }
 
     /**
@@ -37,7 +42,7 @@ class Film_text extends Model
      * */
     public function category()
     {
-        return $this->hasOneThrough(Category::class, Film_category::class, 'film_id', 'category_id', 'film_id', 'category_id');
+        return $this->hasOneThrough(Category::class, Film_category::class, self::Film_id_name, Category::Category_id_name, self::Film_id_name, Category::Category_id_name);
     }
 
 

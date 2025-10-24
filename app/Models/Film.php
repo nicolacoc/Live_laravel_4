@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
+
 /**
  * @property string title
  * @property string description
@@ -16,12 +18,12 @@ use Illuminate\Database\Eloquent\Model;
  *
  *
  * */
-
-
 class Film extends Model
 {
     use HasFactory;
 
+
+    const Film_id_name = 'film_id';
     const Title_name = 'title';
     const Description_name = 'description';
     const Release_year_name = 'release_year';
@@ -35,36 +37,37 @@ class Film extends Model
     const Rental_rate_name = 'rental_rate';
     const Length_name = 'length';
     const Replacement_cost_name = 'replacement_cost';
+    const Laravel_through_key_name = 'laravel_through_key';
+    const Last_update_name = 'last_update';
 
-    protected $table = 'film';
-    protected $primaryKey = 'film_id';
+        protected $table = 'film';
+    protected $primaryKey = self::Film_id_name;
 
     public $timestamps = false;
 
     protected $hidden = [
-        'laravel_through_key',
-        'last_update',
-        'film_id',
-        'language_id',
-        'original_language_id',
-        'actor_id'
+        self::Laravel_through_key_name,
+        self::Last_update_name,
+        self::Film_id_name,
+        self::Language_id_name,
+        self::Original_language_id_name
     ];
 
 
     protected $fillable = [
-        'title',
-        'description',
-        'language_id',
-        'original_language_id',
-        'release_year',
-        'slug',
-        'image',
-        'rating',
-        'special_features',
-        'rental_duration',
-        'rental_rate',
-        'length',
-        'replacement_cost'
+        self::Title_name,
+        self::Description_name,
+        self::Language_id_name,
+        self::Original_language_id_name,
+        self::Release_year_name,
+        self::Slug_name,
+        self::Image_name,
+        self::Rating_name,
+        self::Special_features_name,
+        self::Rental_duration_name,
+        self::Rental_rate_name,
+        self::Length_name,
+        self::Replacement_cost_name
     ];
 
     /**
@@ -72,7 +75,7 @@ class Film extends Model
      * */
     public function actors()
     {
-        return $this->hasManyThrough(Actor::class, Film_actor::class, 'film_id', 'actor_id', 'film_id', 'actor_id');
+        return $this->hasManyThrough(Actor::class, Film_actor::class, self::Film_id_name, Actor::actor_id_name, self::Film_id_name, Actor::actor_id_name);
     }
 
     /**
@@ -80,7 +83,7 @@ class Film extends Model
      * */
     public function Language()
     {
-        return $this->hasOne(Film_language::class, 'language_id', 'language_id');
+        return $this->hasOne(Film_language::class, Film_language::Language_id_name, self::Language_id_name);
     }
 
     /**
@@ -88,7 +91,7 @@ class Film extends Model
      * */
     public function original_language()
     {
-        return $this->hasOne(Film_language::class, 'language_id', 'original_language_id');
+        return $this->hasOne(Film_language::class, Film_language::Language_id_name, self::Original_language_id_name);
     }
 
     /**
@@ -96,14 +99,15 @@ class Film extends Model
      * */
     public function category()
     {
-        return $this->hasOneThrough(Category::class, Film_category::class, 'film_id', 'category_id', 'film_id', 'category_id');
+        return $this->hasOneThrough(Category::class, Film_category::class, self::Film_id_name, Category::Category_id_name, self::Film_id_name, Category::Category_id_name);
     }
 
     /**
      * @see Film_text
      * */
-    public function Film_Text(){
-        return $this->hasOne(Film_text::class, 'film_id', 'film_id');
+    public function Film_Text()
+    {
+        return $this->hasOne(Film_text::class, Film_text::Film_id_name, self::Film_id_name);
     }
 
 

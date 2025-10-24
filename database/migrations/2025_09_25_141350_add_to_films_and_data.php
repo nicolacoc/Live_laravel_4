@@ -20,7 +20,6 @@ return new class extends Migration
 
        $films= Film::query()->get();
        foreach ($films as $film) {
-           $film = film::query()->find($film->film_id);
            $film->slug= str::slug($film->title);
            $film->save();
        }

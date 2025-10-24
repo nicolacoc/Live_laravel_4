@@ -16,22 +16,31 @@ class Actor extends Model
 {
     use HasFactory;
 
+    const First_name_name = 'first_name';
+    const Last_name_name = 'last_name';
+
+    const last_update_name = 'last_update';
+
+    const actor_id_name = 'actor_id';
+
+    const laravel_through_key_name = 'laravel_through_key';
+
     protected $table = 'actor';
     protected $primaryKey = 'actor_id';
     public $timestamps = false;
     protected $fillable=[
-      'first_name',
-        'last_name'
+      self::First_name_name,
+        self::Last_name_name,
     ];
 
     protected $hidden=[
-        'laravel_through_key',
-        'last_update',
-        'actor_id'
+        self::laravel_through_key_name,
+        self::last_update_name,
+        self::actor_id_name,
     ];
 
 
     public function films(){
-        return $this->hasManyThrough(Film::class, Film_actor::class, 'actor_id', 'film_id', 'actor_id', 'film_id');
+        return $this->hasManyThrough(Film::class, Film_actor::class, self::actor_id_name, Film::Film_id_name, self::actor_id_name, Film::Film_id_name);
     }
 }
