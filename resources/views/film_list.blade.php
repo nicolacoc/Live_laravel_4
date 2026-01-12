@@ -7,6 +7,7 @@
 </head>
 <body>
 <div class="container">
+    <main>
     @foreach($actors as $actor)
         <div class="card mb-3">
             <div class="card-body">
@@ -15,6 +16,7 @@
                     <x-film_list_on_actor :film="$actor->films"/>
             </div>
         </div>
+    </main>
     @endforeach
     {{$actors->links()}}
 </div>
