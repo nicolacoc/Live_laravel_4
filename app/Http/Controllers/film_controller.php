@@ -24,7 +24,7 @@ class film_controller extends Controller
 
         $actors_list = Cache::remember('actors_list_page'.$page, 60, function () use ($page) {
 
-            return Actor::query()->with(['films'])->paginate(15,['*'],'page');
+            return Actor::query()->with(['films'])->paginate(3,['*'],'page');
 
         });
 
@@ -32,14 +32,12 @@ class film_controller extends Controller
 
             $films= Film::query()->with(['Language', 'category', 'actors'])->wherehas('actors',function($query) use ($actor){
                 $query->where('actor.actor_id', $actor->actor_id);
-            })
-                ->paginate(5,['*'],'films_list_actor'.$actor->actor_id,)
-                ->withPath('/film?page='.$page);
+            })->get();
             $new_actor = new stdClass();
             $new_actor->Nome = $actor->first_name;
             $new_actor->Cognome = $actor->last_name;
             $new_actor->Prima_lettera = Str::substr($actor->first_name, 0, 1);
-            $new_actor->films = $films->through(function($film){
+            $new_actor->films = $films->map(function($film){
                 $films = new stdClass();
                 $films->language = $film->Language->name;
                 $films->title = $film->title;
