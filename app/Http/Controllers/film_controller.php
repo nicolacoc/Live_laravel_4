@@ -28,27 +28,33 @@ class film_controller extends Controller
 
         });
 
-        $film = $actors_list->through(function ($actor) use ($page) {
+        $film = Cache::remember('Films_page'.$page, 60, function () use ($page, $actors_list) {
 
-            $films= Film::query()->with(['Language', 'category', 'actors'])->wherehas('actors',function($query) use ($actor){
-                $query->where('actor.actor_id', $actor->actor_id);
-            })->get();
-            $new_actor = new stdClass();
-            $new_actor->Nome = $actor->first_name;
-            $new_actor->Cognome = $actor->last_name;
-            $new_actor->Prima_lettera = Str::substr($actor->first_name, 0, 1);
-            $new_actor->films = $films->map(function($film){
-                $films = new stdClass();
-                $films->language = $film->Language->name;
-                $films->title = $film->title;
-                $films->description = $film->description;
-                $films->release_year = $film->release_year;
-                return $films;
+            return $actors_list->through(function ($actor) use ($page) {
+
+                $films = Film::query()->with(['Language', 'category', 'actors'])->wherehas('actors', function ($query) use ($actor) {
+                    $query->where('actor.actor_id', $actor->actor_id);
+                })->get();
+                $new_actor = new stdClass();
+                $new_actor->Nome = $actor->first_name;
+                $new_actor->Cognome = $actor->last_name;
+                $new_actor->Prima_lettera = Str::substr($actor->first_name, 0, 1);
+                $new_actor->films = $films->map(function ($film) {
+                    $films = new stdClass();
+                    $films->language = $film->Language->name;
+                    $films->title = $film->title;
+                    $films->description = $film->description;
+                    $films->release_year = $film->release_year;
+                    return $films;
+                });
+                return $new_actor;
             });
-            return $new_actor;
         });
 
+
         return view('film_list', ['actors' => $film]);
+
+
 
     }
 
