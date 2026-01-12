@@ -28,9 +28,9 @@ class film_controller extends Controller
 
         });
 
-        $film = Cache::remember('Films_page'.$page, 60, function () use ($page, $actors_list) {
+        $film = Cache::remember('Films_page'.$page, 60, function () use ($actors_list) {
 
-            return $actors_list->through(function ($actor) use ($page) {
+            return $actors_list->through(function ($actor) {
 
                 $films = Film::query()
                     ->with('Language')
