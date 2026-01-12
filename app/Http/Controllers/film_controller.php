@@ -32,9 +32,14 @@ class film_controller extends Controller
 
             return $actors_list->through(function ($actor) use ($page) {
 
-                $films = Film::query()->with(['Language', 'category', 'actors'])->wherehas('actors', function ($query) use ($actor) {
+                $films = Film::query()
+                    ->with('Language')
+                    ->with('category')
+                    ->with('actors')
+                    ->wherehas('actors', function ($query) use ($actor) {
                     $query->where('actor.actor_id', $actor->actor_id);
                 })->get();
+
                 $new_actor = new stdClass();
                 $new_actor->Nome = $actor->first_name;
                 $new_actor->Cognome = $actor->last_name;
