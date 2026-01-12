@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\category_controller;
-use App\Http\Controllers\file_controller;
 use App\Http\Controllers\film_controller;
-use App\Http\Controllers\users_controller;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,11 +19,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/film', [film_controller::class, 'index']);
-Route::get('/film/{id}', [film_controller::class, 'prova']);
-Route::get('/category/{id}', [category_controller::class, 'index']);
-Route::post('/film/update/{id}', [film_controller::class, 'update']);
-Route::post('/film/insert', [film_controller::class, 'insert']);
-Route::delete('/film/delete/{id}', [film_controller::class, 'delete']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::post('/file/{id}/', [file_controller::class, 'index']);
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/film', [film_controller::class, 'index'])->name('film.index');
+
+require __DIR__.'/auth.php';
