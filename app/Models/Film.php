@@ -48,7 +48,6 @@ class Film extends Model
     protected $hidden = [
         self::Laravel_through_key_name,
         self::Last_update_name,
-        self::Film_id_name,
         self::Language_id_name,
         self::Original_language_id_name
     ];

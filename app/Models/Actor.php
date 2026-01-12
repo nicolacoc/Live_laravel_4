@@ -43,4 +43,6 @@ class Actor extends Model
     public function films(){
         return $this->hasManyThrough(Film::class, Film_actor::class, self::actor_id_name, Film::Film_id_name, self::actor_id_name, Film::Film_id_name);
     }
+
+
 }
