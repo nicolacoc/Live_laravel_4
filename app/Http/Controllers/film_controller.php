@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Film_ins_upd_Request;
 use App\Models\Actor;
 use App\Models\Film;
+use App\Models\Film_actor;
+use App\Models\Film_language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -14,25 +16,41 @@ class film_controller extends Controller
 {
     function index(Request $request)
     {
-
-        return Cache::remember('films_list', 60, function () {
-
-            $actors = Actor::query()->with(['films' => function ($query) {
-
-                $query->select('title', 'actor_id');
-
-            }])->paginate();
+        $page = $request->page ?? 1;
 
 
-            return $actors->through(function ($actor) {
-                $new_actor = new stdClass();
-                $new_actor->Nome = $actor->first_name;
-                $new_actor->Cognome = $actor->last_name;
-                $new_actor->films = $actor->films->map(fn($film) => $film->title)->toArray();
-                return $new_actor;
-            });
+
+
+
+        $actors_list = Cache::remember('actors_list_page'.$page, 60, function () use ($page) {
+
+            return Actor::query()->with(['films'])->paginate(15,['*'],'page');
 
         });
+
+        $film = $actors_list->through(function ($actor) use ($page) {
+
+            $films= Film::query()->with(['Language', 'category', 'actors'])->wherehas('actors',function($query) use ($actor){
+                $query->where('actor.actor_id', $actor->actor_id);
+            })
+                ->paginate(5,['*'],'films_list_actor'.$actor->actor_id,)
+                ->withPath('/film?page='.$page);
+            $new_actor = new stdClass();
+            $new_actor->Nome = $actor->first_name;
+            $new_actor->Cognome = $actor->last_name;
+            $new_actor->Prima_lettera = Str::substr($actor->first_name, 0, 1);
+            $new_actor->films = $films->through(function($film){
+                $films = new stdClass();
+                $films->language = $film->Language->name;
+                $films->title = $film->title;
+                $films->description = $film->description;
+                $films->release_year = $film->release_year;
+                return $films;
+            });
+            return $new_actor;
+        });
+
+        return view('film_list', ['actors' => $film]);
 
     }
 
