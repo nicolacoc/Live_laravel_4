@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/films_admin',[film_controller::class, 'Index_admin'])->name('films_admin.index');
+    Route::get('/films_admin/del/{id}',[film_controller::class, 'delete'])->name('films_admin.delete');
 });
 
 Route::get('/film', [film_controller::class, 'index'])->name('film.index');

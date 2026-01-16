@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use stdClass;
+use function Laravel\Prompts\error;
 
 class film_controller extends Controller
 {
@@ -95,33 +96,48 @@ class film_controller extends Controller
 
     function delete(Request $request)
     {
-        $film = Film::findOrFail($request->id)->delete();
+        $film = Film::query()->findorfail($request->id)->delete();
 
         Cache::forget('films_list');
         Cache::flush();
+        if ($film) {
+            return redirect()->back();
+        }else{
+             abort(404, 'Film not found');
+        }
 
-        return $film;
     }
 
-    function prova(Request $request)
+
+
+
+    function Index_admin(Request $request)
     {
 
-        return Cache::remember('film_' . $request->id, 60, function () use ($request) {
+        $films= Cache::remember('film_admin_' . $request->id, 60, function () use ($request) {
 
-            return Film::query()
+            $films_list = Film::query()
                 ->with('actors')
                 ->with('language')
-                ->with('original_language')
+                ->with(['original_language' => function ($query) {
+                    $query->select('name', 'language_id');
+                }])
                 ->with('category')
                 ->with(['Film_Text' => function ($query) {
                     $query->select('description', 'film_id');
                 }])
-                ->find($request->id);
+                ->get();
+
+            return $films_list->map(function (Film $film) {
+                $film['original_language'] = $film['original_language']?$film->original_language->name:'null';
+                $film['category'] = $film['category']?$film->category->name:'null';
+                return $film;
+            });
 
 
         });
 
-
+      return view('Films_admin', ['films' => $films]);
     }
 
 }
