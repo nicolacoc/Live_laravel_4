@@ -14,7 +14,18 @@ use Illuminate\Database\Query\Builder;
  * @property string image
  * @property integer language_id
  * @property integer original_language_id
- *
+ * @property float replacement_cost
+ * @property float rental_rate
+ * @property float length
+ * @property float rating
+ * @property string special_features
+ * @property integer rental_duration
+ * @see Film_text;
+ * @see Film_language;
+ * @see Actor;
+ * @see Category;
+ * @see Film_category;
+ * @see Film_actor;
  *
  *
  * */

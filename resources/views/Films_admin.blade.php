@@ -6,12 +6,24 @@
     </x-slot>
 
     <div class="container">
+        @if(!empty(session('message')))
+            <div class="alert alert-success">
+                {{session('message')}}
+            </div>
+        @endif
+            @if ($errors->any())
+                @foreach($errors->all() as $error)
+                    <div class="alert alert-danger" role="alert">
+                        {{$error}}
+                    </div>
+                @endforeach
+            @endif
         <div class="row">
-        <div class="col-12">
-        <div class="d-flex justify-content-between m-3">
-           <a class="btn btn-primary ms-auto" href="#" role="button">Nuovo</a>
-        </div>
-        </div>
+            <div class="col-12">
+                <div class="d-flex justify-content-between m-3">
+                    <a class="btn btn-primary ms-auto" href="{{route('films_admin.edit.insert')}}" role="button">Nuovo</a>
+                </div>
+            </div>
         </div>
         <div class="row">
             <table class="table break-long-words">
@@ -30,22 +42,27 @@
                 </thead>
                 <tbody>
                 @foreach($films as $film)
-                <tr>
-                    <th scope="row">{{$loop->iteration}}</th>
-                    <td>{{$film->title}}</td>
-                    <td class="break-long-words">{{$film->description}}</td>
-                    <td>{{$film->release_year}}</td>
-                    <td>{{$film->length}}</td>
-                    <td>{{$film->language->name}}</td>
-                    <td>{{$film->original_language}}</td>
-                    <td>{{$film->category}}</td>
-                    <td>
-
-                        <a class="btn btn-sm btn-primary m-1" href="#" role="button">Edita</a>
-                        <a class="btn btn-sm btn-danger" href="{{route('films_admin.delete', ['id'=>$film->film_id])}}" role="button">Elimina</a>
-                    </td>
-                </tr>
-                    @endforeach
+                    <tr>
+                        <th scope="row">{{$loop->iteration}}</th>
+                        <td>{{$film->title}}</td>
+                        <td class="break-long-words">{{$film->description}}</td>
+                        <td>{{$film->release_year}}</td>
+                        <td>{{$film->length}}</td>
+                        <td>{{$film->language->name}}</td>
+                        <td>{{$film->original_language}}</td>
+                        <td>{{$film->category}}</td>
+                        <td>
+                            <form action="{{route('films_admin.edit', ['id'=>$film->film_id])}}" method="get">
+                                <button type="submit" class="btn btn-sm btn-secondary m-2" role="button">Edita</button>
+                            </form>
+                            <form action="{{route('films_admin.delete', ['id'=>$film->film_id])}}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" role="button">Elimina</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
 
