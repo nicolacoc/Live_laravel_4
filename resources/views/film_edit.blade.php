@@ -10,14 +10,7 @@
     </x-slot>
 
     <div class="container">
-        @if ($errors->any())
-            @foreach($errors->all() as $error)
-        <div class="alert alert-danger" role="alert">
-            {{$error}}
-        </div>
-            @endforeach
-        @endif
-
+        <x-message errors="$errors" />
         <div class="row bg-white p-5 rounded shadow m-3">
             <form action="{{$url}}" method="post">
                 <input type="hidden" name="{{$name->film_id}}" value="{{$film->film_id}}">
