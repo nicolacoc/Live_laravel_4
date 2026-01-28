@@ -10,7 +10,7 @@
     </x-slot>
 
     <div class="container">
-        <x-message errors="$errors" />
+        <x-message :errors="$errors" />
         <div class="row bg-white p-5 rounded shadow m-3">
             <form action="{{$url}}" method="post">
                 <input type="hidden" name="{{$name->film_id}}" value="{{$film->film_id}}">

@@ -38,6 +38,11 @@ Route::middleware('auth')->group(function () {
     });
     Route::controller(category_controller::class)->prefix('/films_category')->group(function () {
         Route::get('/','Index_admin')->name('films_category.index');
+        Route::get('/edit/{id}','show_edit')->name('films_category.edit');
+        Route::delete('/del/{id}','delete')->name('films_category.delete');
+        Route::get('/insert','show_create')->name('films_category.edit.insert');
+        Route::post('/insert','insert')->name('films_category.insert');
+        Route::post('/edit/upd/{id}','update')->name('films_category.update');
     });
 });
 

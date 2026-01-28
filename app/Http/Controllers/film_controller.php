@@ -89,7 +89,7 @@ class film_controller extends Controller
         $film->original_language_id = (!empty($request->old(Film::Original_language_id_name))) ? $request->old(Film::Original_language_id_name) : $film_sql->original_language_id;
         $film->replacement_cost = (!empty($request->old(Film::Replacement_cost_name))) ? $request->old(Film::Replacement_cost_name) : $film_sql->replacement_cost;
 
-        $name = FilmName::getName();
+        $name = FilmName::getFilmsNames();
         $url = route('films_admin.update',['id'=>$film->film_id]);
         list($languages, $original_languages, $categories) = Language_categories::get_Language_categories($film);
 
@@ -117,7 +117,7 @@ class film_controller extends Controller
         $film->original_language_id = (!empty($request->old(Film::Original_language_id_name))) ? $request->old(Film::Original_language_id_name) : 0;
         $film->replacement_cost = (!empty($request->old(Film::Replacement_cost_name))) ? $request->old(Film::Replacement_cost_name) : '';
 
-        $name = FilmName::getName();
+        $name = FilmName::getFilmsNames();
         $url = route('films_admin.insert');
         list($languages, $original_languages, $categories) = Language_categories::get_Language_categories($film);
 
