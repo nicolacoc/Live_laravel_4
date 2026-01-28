@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\category_controller;
 use App\Http\Controllers\film_controller;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -27,13 +28,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::prefix('/films_admin')->group(function () {
-        Route::get('/', [film_controller::class, 'Index_admin'])->name('films_admin.index');
-        Route::get('/edit/{id}', [film_controller::class, 'show_edit'])->name('films_admin.edit');
-        Route::delete('/del/{id}', [film_controller::class, 'delete'])->name('films_admin.delete');
-        Route::get('/insert', [film_controller::class, 'show_create'])->name('films_admin.edit.insert');
-        Route::post('/insert', [film_controller::class, 'insert'])->name('films_admin.insert');
-        Route::post('/edit/upd/{id}', [film_controller::class, 'update'])->name('films_admin.update');
+    Route::controller(film_controller::class)->prefix('/films_admin')->group(function () {
+        Route::get('/', 'Index_admin')->name('films_admin.index');
+        Route::get('/edit/{id}', 'show_edit')->name('films_admin.edit');
+        Route::delete('/del/{id}', 'delete')->name('films_admin.delete');
+        Route::get('/insert', 'show_create')->name('films_admin.edit.insert');
+        Route::post('/insert', 'insert')->name('films_admin.insert');
+        Route::post('/edit/upd/{id}', 'update')->name('films_admin.update');
+    });
+    Route::controller(category_controller::class)->prefix('/films_category')->group(function () {
+        Route::get('/','Index_admin')->name('films_category.index');
     });
 });
 

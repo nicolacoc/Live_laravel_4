@@ -8,18 +8,24 @@ use Illuminate\Support\Facades\Cache;
 
 class category_controller extends Controller
 {
-    public function index(Request $request)
+    public function index_admin(Request $request)
     {
 
-        return Cache::remember('category_' . $request->id, 60, function () use ($request) {
+        $category_list = Cache::remember('category_list', 60, function () use ($request) {
 
 
-            $category = Category::query()->with('films')->find($request->id);
+            $category = Category::query()->get();
 
-            $item = new \stdClass();
-            $item->categoria = $category->name;
-            $item->films = $category->films->map(fn($item) => $item->title);
-            return $item;
+
+            return $category->map(function ($category) {
+                $item = new \stdClass();
+                $item->categoria = $category->name;
+                return $item;
+            });
         });
+
+        return view('Films_category_admin', [
+            'category_list' => $category_list
+        ]);
     }
 }

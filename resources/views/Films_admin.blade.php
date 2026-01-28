@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="container">
-       <x-message errors="$errors" />
+       <x-message :errors="$errors" />
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-between m-3">
