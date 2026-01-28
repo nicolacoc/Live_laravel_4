@@ -48,7 +48,6 @@ class category_controller extends Controller
 
     public function show_edit(Request $request)
     {
-        Cache::flush();
         $category_sql = Category::query()->findorfail($request->id);
         $name = FilmName::getCategoryNames();
         $category = new \stdClass();
