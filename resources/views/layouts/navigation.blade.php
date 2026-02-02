@@ -26,6 +26,11 @@
                         Films Category
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('films_actor.index')" :active="request()->routeIs('films_actor.index')">
+                        Films Actors
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

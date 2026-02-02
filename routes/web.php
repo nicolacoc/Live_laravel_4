@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\actor_controller;
 use App\Http\Controllers\category_controller;
 use App\Http\Controllers\film_controller;
 use App\Http\Controllers\ProfileController;
@@ -43,6 +44,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/insert','show_create')->name('films_category.edit.insert');
         Route::post('/insert','insert')->name('films_category.insert');
         Route::post('/edit/upd/{id}','update')->name('films_category.update');
+    });
+    Route::controller(actor_controller::class)->prefix('/films_actor')->group(function () {
+        Route::get('/','index_admin')->name('films_actor.index');
+        Route::get('/edit/{id}','show_edit')->name('films_actor.edit');
+        Route::delete('/del/{id}','delete')->name('films_actor.delete');
+        Route::get('/insert','show_create')->name('films_actor.edit.insert');
+        Route::post('/insert','insert')->name('films_actor.insert');
+        Route::post('/edit/upd/{id}','update')->name('films_actor.update');
     });
 });
 
