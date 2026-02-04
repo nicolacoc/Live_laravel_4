@@ -10,8 +10,6 @@ use App\Models\Film_actor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use stdClass;
-use function PHPSTORM_META\type;
-use function PHPUnit\Framework\isNull;
 
 class actor_controller extends Controller
 {
@@ -19,14 +17,14 @@ class actor_controller extends Controller
     {
     }
 
-    public function index_admin(Request $request)
+    public function index_admin()
     {
 
 
         $actor = Cache::remember('actor_list', 60, function () {
             $actor_sql = Actor::query()->get();
             return $actor_sql->map(function ($actor) {
-                $item = new \stdClass();
+                $item = new stdClass();
                 $item->nome = $actor->first_name;
                 $item->cognome = $actor->last_name;
                 $item->id = $actor->actor_id;
@@ -46,7 +44,7 @@ class actor_controller extends Controller
         $url = route('films_actor.update', ['id' => $id]);
         $actor_sql = Actor::query()->findorfail($id);
         if (!empty($actor_sql)) {
-            $actor = new \stdClass();
+            $actor = new stdClass();
             $actor->first_name = ((!empty($request->old(Actor::First_name_name))))?$request->old(Actor::First_name_name):$actor_sql->first_name;
             $actor->last_name = ((!empty($request->old(Actor::Last_name_name))))?$request->old(Actor::Last_name_name):$actor_sql->last_name;
             $actor->actor_id = $actor_sql->actor_id;
@@ -74,7 +72,7 @@ class actor_controller extends Controller
         $film_actor_name = FilmName::getFilmActorNames();
         $url = route('films_actor.insert');
         $id = 0;
-        $actor = new \stdClass();
+        $actor = new stdClass();
         $actor->first_name = ((!empty($request->old(Actor::First_name_name))))?$request->old(Actor::First_name_name):'';
         $actor->last_name = ((!empty($request->old(Actor::Last_name_name))))?$request->old(Actor::Last_name_name):'';
         $actor->actor_id = $id;

@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class Actor_ins_upd_Request extends FormRequest
 {
 
-    private $actor;
+    private array $actor;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -32,7 +32,7 @@ class Actor_ins_upd_Request extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages():array
     {
         return [
             Actor::First_name_name . '.required' => 'The :attribute field is required.',
@@ -44,12 +44,12 @@ class Actor_ins_upd_Request extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->actor = $this->request->all();
     }
 
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator): void
     {
         $validator->validate();
 

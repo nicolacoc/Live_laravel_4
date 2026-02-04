@@ -11,6 +11,19 @@ use stdClass;
 
 class FilmName
 {
+
+    /**
+     * @property string film_id
+     * @property string title
+     * @property string description
+     * @property string length
+     * @property string release_year
+     * @property string language_id
+     * @property string original_language_id
+     * @property string replacement_cost
+     * @property string category_id
+     * */
+
     public static function getFilmsNames(): stdClass
     {
         $name = new stdClass();
@@ -26,21 +39,37 @@ class FilmName
         return $name;
     }
 
-    public static function getCategoryNames(){
+    /**
+     * @property string category_id
+     * @property string name
+     * */
+
+    public static function getCategoryNames(): stdClass{
         $name = new stdClass();
         $name->category_id = Category::Category_id_name;
         $name->name = Category::Name_name;
         return $name;
     }
 
-    public static function getFilmCategoryNames(){
+
+    /**
+     *
+     * @property string film_id
+     * @property string category_id
+     * */
+    public static function getFilmCategoryNames(): stdClass{
         $name = new stdClass();
         $name->film_id = Film_category::Film_id_name;
         $name->category_id = Film_category::Category_id_name;
         return $name;
     }
 
-    public static function getActorNames(){
+    /**
+     * @property string actor_id
+     * @property string first_name
+     * @property string last_name
+     * */
+    public static function getActorNames():stdClass{
         $name = new stdClass();
         $name->actor_id = Actor::actor_id_name;
         $name->first_name = Actor::First_name_name;
@@ -48,7 +77,12 @@ class FilmName
         return $name;
     }
 
-    public static function getFilmActorNames(){
+    /**
+     * @property string film_id
+     * @property string actor_id
+     * */
+
+    public static function getFilmActorNames():stdClass{
         $name = new stdClass();
         $name->film_id = Film_actor::film_id_name;
         $name->actor_id = Film_actor::actor_id_name;

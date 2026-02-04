@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Ausiliari_film;
 use App\Http\Requests\Actor_ins_upd_Request;
 use App\Models\Film;
 use App\Models\Film_actor;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use stdClass;
 
 class FilmActorAuxiliary
@@ -15,9 +17,9 @@ class FilmActorAuxiliary
      * @param stdClass $film_actor_name
      * @param mixed $id
      * @param Request $request
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public static function GetFilmInFilmActor(stdClass $film_actor_name, mixed $id, Request $request): \Illuminate\Support\Collection
+    public static function GetFilmInFilmActor(stdClass $film_actor_name, mixed $id, Request $request): Collection
     {
         $film_sql = Film::query()->get();
         $film_actor_sql = Film_actor::query()->where($film_actor_name->actor_id, $id)->orderBy($film_actor_name->film_id)->get();
@@ -46,9 +48,9 @@ class FilmActorAuxiliary
     /**
      * @param int $id
      * @param Actor_ins_upd_Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public static function GetInsUpdFilmActor(int $id, Actor_ins_upd_Request $request): \Illuminate\Http\RedirectResponse
+    public static function GetInsUpdFilmActor(int $id, Actor_ins_upd_Request $request): RedirectResponse
     {
         $film_actor = Film_actor::query()->where(Film_actor::actor_id_name, $id)->get();
         $film_id = collect($request->film_id);
@@ -58,7 +60,7 @@ class FilmActorAuxiliary
                 $ok = Film_actor::query()->where(Film_actor::actor_id_name, $id)
                     ->where(Film_actor::film_id_name, $film_id_n->film_id)->delete();
             }
-        };
+        }
         foreach ($film_id as $item) {
             $contains = $film_actor->contains(Film_actor::film_id_name, $item);
             if (!$contains) {
