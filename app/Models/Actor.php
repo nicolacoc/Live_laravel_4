@@ -23,6 +23,8 @@ class Actor extends Model
 
     const actor_id_name = 'actor_id';
 
+    const Film_id_name = 'film_id';
+
     const laravel_through_key_name = 'laravel_through_key';
 
     protected $table = 'actor';

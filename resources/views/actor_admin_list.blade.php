@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-between m-3">
-                    <a class="btn btn-primary ms-auto" href="#" role="button">Nuovo</a>
+                    <a class="btn btn-primary ms-auto" href="{{route('films_actor.edit.insert')}}" role="button">Nuovo</a>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
                             <form action="{{route('films_actor.edit', ['id'=>$actor->id])}}" method="get">
                                 <button type="submit" class="btn btn-sm btn-secondary m-2" role="button">Edita</button>
                             </form>
-                            <form action="#" method="post">
+                            <form action="{{route('films_actor.delete', ['id'=>$actor->id])}}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger" role="button">Elimina</button>

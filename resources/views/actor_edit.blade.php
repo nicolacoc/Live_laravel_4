@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            @if(!empty($actor->first_name))
+            @if(!empty($actor->actor_id))
                 Edit - {{$actor->first_name}} {{$actor->last_name}}
             @else
                 Insert
