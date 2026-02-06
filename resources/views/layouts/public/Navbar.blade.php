@@ -5,6 +5,9 @@
                 <x-public.navlink_link :href="route('Home_Page')" class="nav-link"
                                        :active="request()->routeIs('Home_Page')">Home
                 </x-public.navlink_link>
+                <x-public.navlink_link :href="route('film.index')" class="nav-link"
+                                       :active="request()->routeIs('film.index')">Film List
+                </x-public.navlink_link>
             </ul>
             <ul class="navbar-nav ms-auto mb-lg-0">
                 @auth
