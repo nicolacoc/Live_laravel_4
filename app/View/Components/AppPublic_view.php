@@ -12,6 +12,6 @@ class AppPublic_view extends Component
      */
     public function render(): View
     {
-        return view('components.public_view');
+        return view('layouts.public_view');
     }
 }
