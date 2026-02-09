@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Ausiliari_film\FilmName;
 use App\Http\Controllers\Ausiliari_film\Language_categories;
+use App\Http\Controllers\Ausiliari_film\Search;
 use App\Http\Requests\Film_ins_upd_Request;
 use App\Models\Actor;
-use App\Models\Category;
 use App\Models\Film;
-use App\Models\Film_actor;
 use App\Models\Film_category;
-use App\Models\Film_language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -23,41 +21,47 @@ class film_controller extends Controller
     function index(Request $request)
     {
         $page = $request->page ?? 1;
+        $search = ((isset($request->search))) ? $request->search : '';
+
+        if (!empty($search)) {
+            $actors_list = Search::Film_search($search, $page);
+        } else {
 
 
-        $actors_list = Cache::remember('actors_list_page' . $page, 60, function () use ($page) {
+            $actors_list = Cache::remember('actors_list_page' . $page, 60, function () use ($page) {
 
-            return Actor::query()->with(['films'])->paginate(3, ['*'], 'page');
+                return Actor::query()->with(['films'])->paginate(3, ['*'], 'page');
 
-        });
-
-        $film = Cache::remember('Films_page' . $page, 60, function () use ($actors_list) {
-
-            return $actors_list->through(function ($actor) {
-
-                $films = Film::query()
-                    ->with('Language')
-                    ->with('category')
-                    ->with('actors')
-                    ->wherehas('actors', function ($query) use ($actor) {
-                        $query->where('actor.actor_id', $actor->actor_id);
-                    })->get();
-
-                $new_actor = new stdClass();
-                $new_actor->Nome = $actor->first_name;
-                $new_actor->Cognome = $actor->last_name;
-                $new_actor->Prima_lettera = Str::substr($actor->first_name, 0, 1);
-                $new_actor->films = $films->map(function ($film) {
-                    $films = new stdClass();
-                    $films->language = $film->Language->name;
-                    $films->title = $film->title;
-                    $films->description = $film->description;
-                    $films->release_year = $film->release_year;
-                    return $films;
-                });
-                return $new_actor;
             });
-        });
+        }
+
+            $film = Cache::remember('Films_page' . $page, 60, function () use ($actors_list) {
+
+                return $actors_list->through(function ($actor) {
+
+                    $films = Film::query()
+                        ->with('Language')
+                        ->with('category')
+                        ->with('actors')
+                        ->wherehas('actors', function ($query) use ($actor) {
+                            $query->where('actor.actor_id', $actor->actor_id);
+                        })->get();
+
+                    $new_actor = new stdClass();
+                    $new_actor->Nome = $actor->first_name;
+                    $new_actor->Cognome = $actor->last_name;
+                    $new_actor->Prima_lettera = Str::substr($actor->first_name, 0, 1);
+                    $new_actor->films = $films->map(function ($film) {
+                        $films = new stdClass();
+                        $films->language = $film->Language->name;
+                        $films->title = $film->title;
+                        $films->description = $film->description;
+                        $films->release_year = $film->release_year;
+                        return $films;
+                    });
+                    return $new_actor;
+                });
+            });
 
 
         return view('film_list', ['actors' => $film]);
@@ -248,7 +252,6 @@ class film_controller extends Controller
 
         return view('Films_admin', ['films' => $films]);
     }
-
 
 
 
