@@ -24,7 +24,7 @@ class Search
 
 
         if (!$film_list->isEmpty()) {
-            $actors_list = Cache::remember('actors_search_' . $search . '_' . $page, 60, function () use ($search, $page, $film_list) {
+            $actors_list = Cache::remember('actors_search_' . $search . '_' . $page, 5, function () use ($search, $page, $film_list) {
                 return Actor::query()
                     ->with(['films'])
                     ->whereHas('films', function ($query) use ($film_list) {
@@ -35,12 +35,17 @@ class Search
             });
 
         } else {
-            $actors_list = Cache::remember('actors_search_' . $search . '_' . $page, 60, function () use ($search, $page) {
-                return Actor::search($search)
-                    ->options(['query_by' => 'first_name, last_name'])
-                    ->paginate(3, 'page')
-                    ->withPath('?search=' . $search);
+            $actors_list = Cache::remember('actors_search_' . $search . '_' . $page, 5, function () use ($search, $page) {
+
+
+                return Actor::query()
+                    ->whereFullText(['first_name', 'last_name'], $search)
+                    ->orWhere('first_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('last_name', 'LIKE', '%' . $search . '%')
+                    ->paginate(3, ['*'], 'page');
+
             });
+
         }
         return $actors_list;
     }

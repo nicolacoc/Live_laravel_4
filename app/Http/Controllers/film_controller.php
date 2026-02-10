@@ -21,7 +21,7 @@ class film_controller extends Controller
     function index(Request $request)
     {
         $page = $request->page ?? 1;
-        $search = ((isset($request->search))) ? $request->search : '';
+        $search = ((!empty($request->input('search')))) ? $request->input('search') : '';
 
         if (!empty($search)) {
             $actors_list = Search::Film_search($search, $page);
@@ -35,7 +35,7 @@ class film_controller extends Controller
             });
         }
 
-            $film = Cache::remember('Films_page' . $page, 60, function () use ($actors_list) {
+            $film = Cache::remember('Films_page' . $page.'_'.$search, 60, function () use ($actors_list) {
 
                 return $actors_list->through(function ($actor) {
 
