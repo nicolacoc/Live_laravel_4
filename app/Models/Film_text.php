@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 /**
  *
@@ -21,6 +22,9 @@ class Film_text extends Model
     const Description_name = 'description';
 
     use HasFactory;
+
+    use Searchable;
+
     protected $table = 'film_text';
 
     protected $fillable = [self::Film_id_name,self::Title_name, self::Description_name];

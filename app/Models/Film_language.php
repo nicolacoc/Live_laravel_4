@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 /**
  *
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
 class Film_language extends Model
 {
     use HasFactory;
+
+    use Searchable;
 
     const Language_id_name = 'language_id';
     const Name_name = 'name';
