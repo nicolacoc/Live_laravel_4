@@ -35,33 +35,33 @@ class film_controller extends Controller
             });
         }
 
-            $film = Cache::remember('Films_page' . $page.'_'.$search, 60, function () use ($actors_list) {
+        $film = Cache::remember('Films_page' . $page . '_' . $search, 60, function () use ($actors_list) {
 
-                return $actors_list->through(function ($actor) {
+            return $actors_list->through(function ($actor) {
 
-                    $films = Film::query()
-                        ->with('Language')
-                        ->with('category')
-                        ->with('actors')
-                        ->wherehas('actors', function ($query) use ($actor) {
-                            $query->where('actor.actor_id', $actor->actor_id);
-                        })->get();
+                $films = Film::query()
+                    ->with('Language')
+                    ->with('category')
+                    ->with('actors')
+                    ->wherehas('actors', function ($query) use ($actor) {
+                        $query->where('actor.actor_id', $actor->actor_id);
+                    })->get();
 
-                    $new_actor = new stdClass();
-                    $new_actor->Nome = $actor->first_name;
-                    $new_actor->Cognome = $actor->last_name;
-                    $new_actor->Prima_lettera = Str::substr($actor->first_name, 0, 1);
-                    $new_actor->films = $films->map(function ($film) {
-                        $films = new stdClass();
-                        $films->language = $film->Language->name;
-                        $films->title = $film->title;
-                        $films->description = $film->description;
-                        $films->release_year = $film->release_year;
-                        return $films;
-                    });
-                    return $new_actor;
+                $new_actor = new stdClass();
+                $new_actor->Nome = $actor->first_name;
+                $new_actor->Cognome = $actor->last_name;
+                $new_actor->Prima_lettera = Str::substr($actor->first_name, 0, 1);
+                $new_actor->films = $films->map(function ($film) {
+                    $films = new stdClass();
+                    $films->language = $film->Language->name;
+                    $films->title = $film->title;
+                    $films->description = $film->description;
+                    $films->release_year = $film->release_year;
+                    return $films;
                 });
+                return $new_actor;
             });
+        });
 
 
         return view('film_list', ['actors' => $film]);
@@ -86,7 +86,7 @@ class film_controller extends Controller
         $film->film_id = (!empty($request->old(Film::Film_id_name))) ? $request->old(Film::Film_id_name) : $film_sql->film_id;
         $film->title = (!empty($request->old(Film::Title_name))) ? $request->old(Film::Title_name) : $film_sql->title;
         $film->description = (!empty($request->old(Film::Description_name))) ? $request->old(Film::Description_name) : $film_sql->description;
-        $film->category_id = (!empty($request->old(Film_category::Category_id_name)))? $request->old(Film_category::Category_id_name) : $film_category_sql->category_id;
+        $film->category_id = (!empty($request->old(Film_category::Category_id_name))) ? $request->old(Film_category::Category_id_name) : $film_category_sql->category_id;
         $film->length = (!empty($request->old(Film::Length_name))) ? $request->old(Film::Length_name) : $film_sql->length;
         $film->release_year = (!empty($request->old(Film::Release_year_name))) ? $request->old(Film::Release_year_name) : $film_sql->release_year;
         $film->language_id = (!empty($request->old(Film::Language_id_name))) ? $request->old(Film::Language_id_name) : $film_sql->language_id;
@@ -94,7 +94,7 @@ class film_controller extends Controller
         $film->replacement_cost = (!empty($request->old(Film::Replacement_cost_name))) ? $request->old(Film::Replacement_cost_name) : $film_sql->replacement_cost;
 
         $name = FilmName::getFilmsNames();
-        $url = route('films_admin.update',['id'=>$film->film_id]);
+        $url = route('films_admin.update', ['id' => $film->film_id]);
         list($languages, $original_languages, $categories) = Language_categories::get_Language_categories($film);
 
 
@@ -114,7 +114,7 @@ class film_controller extends Controller
         $film->film_id = (!empty($request->old(Film::Film_id_name))) ? $request->old(Film::Film_id_name) : 0;
         $film->title = (!empty($request->old(Film::Title_name))) ? $request->old(Film::Title_name) : '';
         $film->description = (!empty($request->old(Film::Description_name))) ? $request->old(Film::Description_name) : '';
-        $film->category_id = (!empty($request->old(Film_category::Category_id_name)))? $request->old(Film_category::Category_id_name) : 0;
+        $film->category_id = (!empty($request->old(Film_category::Category_id_name))) ? $request->old(Film_category::Category_id_name) : 0;
         $film->length = (!empty($request->old(Film::Length_name))) ? $request->old(Film::Length_name) : '';
         $film->release_year = (!empty($request->old(Film::Release_year_name))) ? $request->old(Film::Release_year_name) : '';
         $film->language_id = (!empty($request->old(Film::Language_id_name))) ? $request->old(Film::Language_id_name) : 0;
@@ -138,39 +138,36 @@ class film_controller extends Controller
 
     function insert(Film_ins_upd_Request $request)
     {
-        $all = $request->all();
+        $film = $request->only([
+            Film::Title_name,
+            Film::Description_name,
+            Film::Length_name,
+            Film::Release_year_name,
+            Film::Language_id_name,
+            Film::Original_language_id_name,
+            Film::Replacement_cost_name
+        ]);
 
-
-        $film = [];
-        $film[Film::Title_name] = $all[Film::Title_name];
-        $film[Film::Description_name] = $all[Film::Description_name];
-        $film[Film::Length_name] = $all[Film::Length_name];
-        $film[Film::Release_year_name] = $all[Film::Release_year_name];
-        $film[Film::Language_id_name] = $all[Film::Language_id_name];
-        $film[Film::Original_language_id_name] = $all[Film::Original_language_id_name];
-        $film[Film::Replacement_cost_name] = $all[Film::Replacement_cost_name];
-        $film[Film::Slug_name] = Str::slug($all[Film::Title_name]);
-
-
+        $film[Film::Slug_name] = Str::slug($film[Film::Title_name]);
 
 
         $film = Film::factory()->create($film);
 
         $film_category = new Film_category;
         $film_category->film_id = $film->film_id;
-        $film_category->category_id = $all[Film_category::Category_id_name];
-        $film_category_ok= $film_category->save();
+        $film_category->category_id = $film[Film_category::Category_id_name];
+        $film_category_ok = $film_category->save();
         Cache::flush();
 
-        if ($film&&$film_category_ok) {
+        if ($film && $film_category_ok) {
             return redirect()
                 ->route('films_admin.index')
-                ->with(['message'=>'Film Inserito con successo']);
+                ->with(['message' => 'Film Inserito con successo']);
 
         } else {
             return redirect()
                 ->route('films_admin.index')
-                ->withErrors(['error'=>'Errore durante l\'inserimento']);
+                ->withErrors(['error' => 'Errore durante l\'inserimento']);
 
         }
 
@@ -186,14 +183,14 @@ class film_controller extends Controller
         $film_category = Film_category::query()->findOrNew($request->id);
         $film_category->film_id = $all[Film::Film_id_name];
         $film_category->category_id = $all[Film_category::Category_id_name];
-        $film_category_ok= $film_category->save();
+        $film_category_ok = $film_category->save();
 
         Cache::flush();
 
-        if ($film&&$film_category_ok) {
+        if ($film && $film_category_ok) {
             return redirect()
                 ->route('films_admin.index')
-                ->with(['message'=>'Film Aggiornato con successo']);
+                ->with(['message' => 'Film Aggiornato con successo']);
 
         } else {
             abort(404, 'Film not found');
@@ -206,8 +203,8 @@ class film_controller extends Controller
 
         if ($film_category) {
             $film = Film::query()->findorfail($request->id)->delete();
-        }else{
-            $film=false;
+        } else {
+            $film = false;
         }
         Cache::flush();
 
@@ -252,7 +249,6 @@ class film_controller extends Controller
 
         return view('Films_admin', ['films' => $films]);
     }
-
 
 
 }
