@@ -138,6 +138,7 @@ class film_controller extends Controller
 
     function insert(Film_ins_upd_Request $request)
     {
+        $all = $request->all();
         $film = $request->only([
             Film::Title_name,
             Film::Description_name,
@@ -155,7 +156,7 @@ class film_controller extends Controller
 
         $film_category = new Film_category;
         $film_category->film_id = $film->film_id;
-        $film_category->category_id = $film[Film_category::Category_id_name];
+        $film_category->category_id = $all[Film_category::Category_id_name];
         $film_category_ok = $film_category->save();
         Cache::flush();
 
@@ -199,7 +200,13 @@ class film_controller extends Controller
 
     function delete(Request $request)
     {
-        $film_category = Film_category::query()->findOrfail($request->id)->delete();
+        $film_category_count=Film_category::query()->find($request->id)->count();
+
+        if($film_category_count>0) {
+            $film_category = Film_category::query()->findOrFail($request->id)->delete();
+        }else{
+            $film_category=true;
+        }
 
         if ($film_category) {
             $film = Film::query()->findorfail($request->id)->delete();
