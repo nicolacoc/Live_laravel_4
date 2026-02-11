@@ -19,8 +19,10 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(Blueprint $table): void
+    public function down(): void
     {
-        $table->dropFullText('fulltext_search');
+        Schema::table('actor', function (Blueprint $table) {
+            $table->dropFullText('fulltext_search');
+        });
     }
 };
