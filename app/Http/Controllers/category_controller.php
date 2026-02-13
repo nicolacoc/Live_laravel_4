@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Ausiliari_film\FilmName;
 use App\Http\Requests\Category_ins_upd_Request;
 use App\Models\Category;
+use App\Models\Film_category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -82,8 +83,18 @@ class category_controller extends Controller
 
     public function delete(Request $request)
     {
-        $category = Category::query()->findorfail($request->id)->delete();
+        $film_Category_count = Film_category::query()->where('category_id',$request->id)->count();
+        if ($film_Category_count > 0) {
+          $film_category = Film_category::query()->where('category_id',$request->id)->delete();
+        }else{
+            $film_category=true;
+        }
 
+        if ($film_category) {
+            $category = Category::query()->findorfail($request->id)->delete();
+        }else{
+            $category=false;
+        }
         Cache::flush();
 
         if( $category) {
