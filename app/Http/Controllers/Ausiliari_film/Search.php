@@ -42,7 +42,8 @@ class Search
                     ->whereFullText(['first_name', 'last_name'], $search)
                     ->orWhere('first_name', 'LIKE', '%' . $search . '%')
                     ->orWhere('last_name', 'LIKE', '%' . $search . '%')
-                    ->paginate(3, ['*'], 'page');
+                    ->paginate(3, ['*'], 'page')
+                    ->withPath('?search=' . $search);
 
             });
 
