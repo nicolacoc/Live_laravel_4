@@ -17,17 +17,17 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('films_admin.index')" :active="request()->routeIs('films_admin.index')">
+                    <x-nav-link :href="route('films_admin.index')" :active="request()->routeIs('films_admin.*')">
                         Films
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('films_category.index')" :active="request()->routeIs('films_category.index')">
+                    <x-nav-link :href="route('films_category.index')" :active="request()->routeIs('films_category.*')">
                         Films Category
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('films_actor.index')" :active="request()->routeIs('films_actor.index')">
+                    <x-nav-link :href="route('films_actor.index')" :active="request()->routeIs('films_actor.*')">
                         Films Actors
                     </x-nav-link>
                 </div>

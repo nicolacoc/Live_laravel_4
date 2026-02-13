@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Ausiliari_film\FilmAuxiliary;
 use App\Http\Controllers\Ausiliari_film\FilmName;
 use App\Http\Controllers\Ausiliari_film\Language_categories;
 use App\Http\Controllers\Ausiliari_film\Search;
@@ -138,7 +139,7 @@ class film_controller extends Controller
 
     function insert(Film_ins_upd_Request $request)
     {
-        $all = $request->all();
+        $film_category_input = $request->input(Film_category::Category_id_name);
         $film = $request->only([
             Film::Title_name,
             Film::Description_name,
@@ -156,7 +157,7 @@ class film_controller extends Controller
 
         $film_category = new Film_category;
         $film_category->film_id = $film->film_id;
-        $film_category->category_id = $all[Film_category::Category_id_name];
+        $film_category->category_id = $film_category_input;
         $film_category_ok = $film_category->save();
         Cache::flush();
 
@@ -167,8 +168,10 @@ class film_controller extends Controller
 
         } else {
             return redirect()
-                ->route('films_admin.index')
-                ->withErrors(['error' => 'Errore durante l\'inserimento']);
+                ->back()
+                ->withErrors(['error' => 'Errore durante l\'inserimento'])
+                ->withInput($request->all());
+
 
         }
 
@@ -176,14 +179,27 @@ class film_controller extends Controller
 
     function update(Film_ins_upd_Request $request)
     {
-        $all = $request->all();
-        $all[Film::Slug_name] = Str::slug($all[Film::Title_name]);;
+        $film_category_input = $request->only([
+            Film_category::Category_id_name,
+            Film::Film_id_name
+        ]);
+        $film = $request->only([
+            Film::Title_name,
+            Film::Description_name,
+            Film::Length_name,
+            Film::Release_year_name,
+            Film::Language_id_name,
+            Film::Original_language_id_name,
+            Film::Replacement_cost_name
+        ]);
 
-        $film = Film::query()->findOrFail($request->id)->update($all);
+        $film[Film::Slug_name] = Str::slug($film[Film::Title_name]);
+
+        $film = Film::query()->findOrFail($request->id)->update($film);
 
         $film_category = Film_category::query()->findOrNew($request->id);
-        $film_category->film_id = $all[Film::Film_id_name];
-        $film_category->category_id = $all[Film_category::Category_id_name];
+        $film_category->film_id = $film_category_input[Film_category::Film_id_name];
+        $film_category->category_id = $film_category_input[Film_category::Category_id_name];
         $film_category_ok = $film_category->save();
 
         Cache::flush();
@@ -200,19 +216,8 @@ class film_controller extends Controller
 
     function delete(Request $request)
     {
-        $film_category_count=Film_category::query()->find($request->id)->count();
-
-        if($film_category_count>0) {
-            $film_category = Film_category::query()->findOrFail($request->id)->delete();
-        }else{
-            $film_category=true;
-        }
-
-        if ($film_category) {
-            $film = Film::query()->findorfail($request->id)->delete();
-        } else {
-            $film = false;
-        }
+        $id = $request->id;
+        $film = FilmAuxiliary::delete($id);
         Cache::flush();
 
         if ($film) {
@@ -256,6 +261,7 @@ class film_controller extends Controller
 
         return view('Films_admin', ['films' => $films]);
     }
+
 
 
 }
