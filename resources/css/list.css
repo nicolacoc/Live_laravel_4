@@ -1,0 +1,22 @@
+div.search {
+    width: 30%; margin: auto
+}
+
+div.actor_list {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    min-width: 80%; margin: auto
+}
+
+.container {
+    background-image: url('../../public/sfondo/IMG_4070.PNG');
+    background-size: cover;
+    min-height: 100vh;
+}
+
+footer{
+    background-color: white;
+}
+
+div.text-center > h1 {
+    color: white;
+}

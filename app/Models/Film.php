@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+use Laravel\Scout\Searchable;
 
 /**
+ * @property int film_id
  * @property string title
  * @property string description
  * @property integer release_year
@@ -14,13 +15,25 @@ use Illuminate\Database\Query\Builder;
  * @property string image
  * @property integer language_id
  * @property integer original_language_id
- *
+ * @property float replacement_cost
+ * @property float rental_rate
+ * @property float length
+ * @property float rating
+ * @property string special_features
+ * @property integer rental_duration
+ * @see Film_text;
+ * @see Film_language;
+ * @see Actor;
+ * @see Category;
+ * @see Film_category;
+ * @see Film_actor;
  *
  *
  * */
 class Film extends Model
 {
     use HasFactory;
+    use Searchable;
 
 
     const Film_id_name = 'film_id';
@@ -48,7 +61,6 @@ class Film extends Model
     protected $hidden = [
         self::Laravel_through_key_name,
         self::Last_update_name,
-        self::Film_id_name,
         self::Language_id_name,
         self::Original_language_id_name
     ];

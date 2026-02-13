@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\actor_controller;
 use App\Http\Controllers\category_controller;
-use App\Http\Controllers\file_controller;
 use App\Http\Controllers\film_controller;
-use App\Http\Controllers\users_controller;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,13 +19,43 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+})->name('Home_Page');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::controller(film_controller::class)->prefix('/films_admin')->group(function () {
+        Route::get('/', 'Index_admin')->name('films_admin.index');
+        Route::get('/edit/{id}', 'show_edit')->name('films_admin.edit');
+        Route::delete('/del/{id}', 'delete')->name('films_admin.delete');
+        Route::get('/insert', 'show_create')->name('films_admin.edit.insert');
+        Route::post('/insert', 'insert')->name('films_admin.insert');
+        Route::post('/edit/upd/{id}', 'update')->name('films_admin.update');
+    });
+    Route::controller(category_controller::class)->prefix('/films_category')->group(function () {
+        Route::get('/','Index_admin')->name('films_category.index');
+        Route::get('/edit/{id}','show_edit')->name('films_category.edit');
+        Route::delete('/del/{id}','delete')->name('films_category.delete');
+        Route::get('/insert','show_create')->name('films_category.edit.insert');
+        Route::post('/insert','insert')->name('films_category.insert');
+        Route::post('/edit/upd/{id}','update')->name('films_category.update');
+    });
+    Route::controller(actor_controller::class)->prefix('/films_actor')->group(function () {
+        Route::get('/','index_admin')->name('films_actor.index');
+        Route::get('/edit/{id}','show_edit')->name('films_actor.edit');
+        Route::delete('/del/{id}','delete')->name('films_actor.delete');
+        Route::get('/insert','show_create')->name('films_actor.edit.insert');
+        Route::post('/insert','insert')->name('films_actor.insert');
+        Route::post('/edit/upd/{id}','update')->name('films_actor.update');
+    });
 });
 
-Route::get('/film', [film_controller::class, 'index']);
-Route::get('/film/{id}', [film_controller::class, 'prova']);
-Route::get('/category/{id}', [category_controller::class, 'index']);
-Route::post('/film/update/{id}', [film_controller::class, 'update']);
-Route::post('/film/insert', [film_controller::class, 'insert']);
-Route::delete('/film/delete/{id}', [film_controller::class, 'delete']);
+Route::get('/actor', [film_controller::class, 'index'])->name('film.index');
+Route::get('/actor/{id}', [film_controller::class, 'film_detail'])->name('film.detail');
 
-Route::post('/file/{id}/', [file_controller::class, 'index']);
+require __DIR__.'/auth.php';

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 /**
  * @property int actor_id
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 class Actor extends Model
 {
     use HasFactory;
+    use Searchable;
 
     const First_name_name = 'first_name';
     const Last_name_name = 'last_name';
@@ -22,6 +24,8 @@ class Actor extends Model
     const last_update_name = 'last_update';
 
     const actor_id_name = 'actor_id';
+
+    const Film_id_name = 'film_id';
 
     const laravel_through_key_name = 'laravel_through_key';
 
