@@ -6,7 +6,7 @@
                                        :active="request()->routeIs('Home_Page')">Home
                 </x-public.navlink_link>
                 <x-public.navlink_link :href="route('film.index')" class="nav-link fw-bold"
-                                       :active="request()->routeIs('film.index')">Film List
+                                       :active="request()->routeIs('film.index')">Actor List
                 </x-public.navlink_link>
             </ul>
             <ul class="navbar-nav ms-auto mb-lg-0">

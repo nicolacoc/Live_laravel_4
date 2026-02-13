@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/film', [film_controller::class, 'index'])->name('film.index');
+Route::get('/actor', [film_controller::class, 'index'])->name('film.index');
+Route::get('/actor/{id}', [film_controller::class, 'film_detail'])->name('film.detail');
 
 require __DIR__.'/auth.php';

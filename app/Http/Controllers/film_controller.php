@@ -31,7 +31,7 @@ class film_controller extends Controller
 
             $actors_list = Cache::remember('actors_list_page' . $page, 60, function () use ($page) {
 
-                return Actor::query()->with(['films'])->paginate(3, ['*'], 'page');
+                return Actor::query()->with(['films'])->paginate(40, ['*'], 'page');
 
             });
         }
@@ -39,6 +39,29 @@ class film_controller extends Controller
         $film = Cache::remember('Films_page' . $page . '_' . $search, 60, function () use ($actors_list) {
 
             return $actors_list->through(function ($actor) {
+
+
+                $new_actor = new stdClass();
+                $new_actor->id = $actor->actor_id;
+                $new_actor->Nome = $actor->first_name;
+                $new_actor->Cognome = $actor->last_name;
+                $new_actor->Prima_lettera = Str::substr($actor->first_name, 0, 1);
+                return $new_actor;
+            });
+        });
+
+
+        return view('film_list', ['actors' => $film]);
+
+
+    }
+
+
+    function film_detail(Request $request)
+    {
+        $id = $request->id;
+        $actor = Actor::query()->where('actor_id', $id)->first();
+        $film = Cache::remember('Film_detail ' . $id, 60, function () use ($actor) {
 
                 $films = Film::query()
                     ->with('Language')
@@ -62,14 +85,10 @@ class film_controller extends Controller
                 });
                 return $new_actor;
             });
-        });
 
 
-        return view('film_list', ['actors' => $film]);
-
-
+        return view('film_detail', ['actor' => $film]);
     }
-
 
     function show_edit(Request $request)
     {

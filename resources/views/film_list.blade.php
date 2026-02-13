@@ -1,13 +1,9 @@
 <x-app-public_view>
     <x-slot name="head">
-        <style>
-            div.search {
-                width: 30%; margin: auto
-            }
-        </style>
+        @vite(['resources/css/list.css'])
     </x-slot>
 
-    <div class="search">
+    <div class="search bg-white">
         <form action="{{route('film.index')}}" method="get">
             <div class="input-group mb-3">
                 <button class="btn btn-outline-primary" type="submit" id="button-addon1">Cerca</button>
@@ -18,16 +14,15 @@
             </form>
     </div>
     <div class="text-center">
-        <h1>Lista Film</h1>
+        <h1>Lista Attori</h1>
     </div>
-    <div>
+    <div class="actor_list">
     @foreach($actors as $actor)
-        <div class="card mb-3">
+        <div class="card mb-3 bg-white">
             <div class="card-body">
                 <h6 class="text-body-secondary">Attore:</h6>
-                <h5 class="card-title">{{$actor->Nome}} {{$actor->Cognome}}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">Films:</h6>
-                <x-film_list_on_actor :film="$actor->films"/>
+                <a href="{{route('film.detail', ['id'=>$actor->id])}}" ><h5 class="card-title">{{$actor->Nome}} {{$actor->Cognome}}</h5></a>
+
             </div>
         </div>
     @endforeach

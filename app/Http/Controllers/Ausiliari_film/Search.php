@@ -30,7 +30,7 @@ class Search
                     ->whereHas('films', function ($query) use ($film_list) {
                         $query->whereIn('film.film_id', $film_list->pluck('film_id'));
                     })
-                    ->paginate(3, ['*'], 'page')
+                    ->paginate(15, ['*'], 'page')
                     ->withPath('?search=' . $search);
             });
 
@@ -42,7 +42,7 @@ class Search
                     ->whereFullText(['first_name', 'last_name'], $search)
                     ->orWhere('first_name', 'LIKE', '%' . $search . '%')
                     ->orWhere('last_name', 'LIKE', '%' . $search . '%')
-                    ->paginate(3, ['*'], 'page')
+                    ->paginate(15, ['*'], 'page')
                     ->withPath('?search=' . $search);
 
             });
