@@ -18,7 +18,7 @@
     </div>
     <div class="actor_list">
     @foreach($actors as $actor)
-        <div class="card mb-3 bg-white">
+        <div class="card bg-white mb-3 ms-1">
             <div class="card-body">
                 <h6 class="text-body-secondary">Attore:</h6>
                 <a href="{{route('film.detail', ['id'=>$actor->id])}}" ><h5 class="card-title">{{$actor->Nome}} {{$actor->Cognome}}</h5></a>
@@ -27,5 +27,7 @@
         </div>
     @endforeach
     </div>
+    <div class="pag">
         {{$actors->links()}}
+    </div>
 </x-app-public_view>
