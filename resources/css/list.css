@@ -20,3 +20,7 @@ footer{
 div.text-center > h1 {
     color: white;
 }
+
+div.pag > nav > div > div > p {
+    color: white !important;
+}
