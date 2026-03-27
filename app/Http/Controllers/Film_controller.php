@@ -17,7 +17,7 @@ use stdClass;
 use function Laravel\Prompts\error;
 use function PHPUnit\Framework\isNull;
 
-class film_controller extends Controller
+class Film_controller extends Controller
 {
     function index(Request $request)
     {

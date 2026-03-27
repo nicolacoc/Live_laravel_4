@@ -9,7 +9,7 @@ use App\Models\Film_category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
-class category_controller extends Controller
+class Category_controller extends Controller
 {
     public function index_admin(Request $request)
     {
