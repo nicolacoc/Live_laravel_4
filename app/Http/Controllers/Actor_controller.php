@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use stdClass;
 
-class actor_controller extends Controller
+class Actor_controller extends Controller
 {
     public function index(Request $request)
     {

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class file_controller extends Controller
+class File_controller extends Controller
 {
     public function index(Request $request): string
     {
